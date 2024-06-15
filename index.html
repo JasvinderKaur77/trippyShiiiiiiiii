@@ -1,0 +1,82 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Advanced Wavy Text Effect</title>
+     <style>
+         body {
+             margin: 0;
+             overflow: hidden;
+             background-color: black;
+         }
+         canvas {
+             display: block;
+         }
+     </style>
+ </head>
+ <body>
+     <canvas id="canvas"></canvas>
+     <script>
+         const canvas = document.getElementById('canvas');
+         const ctx = canvas.getContext('2d');
+ 
+         canvas.width = window.innerWidth;
+         canvas.height = window.innerHeight;
+ 
+         const text = "ARE YOU TRIPPING RN NIGGAAAAAAAAAAAA";
+         const additionalText = "GOODBOYS DON'T DRINK SO MUCH, UNDERSTOOD POOKIE?";
+         const fontSize = 24;
+         const waveHeight = 40;
+         const waveFrequency = 0.2;
+         const waveSpeed = 0.02;
+         let time = 0;
+ 
+         function drawText(text, yOffset) {
+             const centerX = canvas.width / 2;
+             const centerY = canvas.height / 2 + yOffset;
+ 
+             for (let j = -10; j < 10; j++) {
+                 ctx.save();
+                 ctx.translate(centerX, centerY + j * 70);
+ 
+                 for (let i = 0; i < text.length; i++) {
+                     const char = text[i];
+                     const x = (i - text.length / 2) * fontSize;
+                     const y = Math.sin((i + time) * waveFrequency + j * 0.5) * waveHeight;
+                     ctx.fillText(char, x, y);
+                 }
+ 
+                 ctx.restore();
+             }
+         }
+ 
+         function draw() {
+             ctx.clearRect(0, 0, canvas.width, canvas.height);
+ 
+             // Create a radial gradient for the text color
+             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+             gradient.addColorStop(0, '#00bfff');
+             gradient.addColorStop(0.5, '#1e90ff');
+             gradient.addColorStop(1, '#00bfff');
+ 
+             ctx.fillStyle = gradient;
+             ctx.font = `${fontSize}px 'Arial', sans-serif`;
+             ctx.textBaseline = "middle";
+ 
+             drawText(text, 0);
+ 
+             // Draw additional text
+             ctx.fillStyle = 'WHITE';
+             ctx.font = `${fontSize * 0.8}px 'Arial', sans-serif`;
+             drawText(additionalText, 100);
+ 
+             time += waveSpeed;
+             requestAnimationFrame(draw);
+         }
+ 
+         draw();
+     </script>
+ </body>
+ </html>
+ 
